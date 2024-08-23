@@ -1,17 +1,15 @@
 export default {
+  NODE_ENV: process.env.NODE_ENV || 'development',
+
   TIMEZONE: 'Europe/Moscow',
+  PRODUCTION_DOMAIN: '', // Например google.com
 
   DATABASE_URL: process.env.DATABASE_URL,
 
-  TELEGRAM_NOTIFICATIONS_BOT_TOKEN:
-    process.env.TELEGRAM_NOTIFICATIONS_BOT_TOKEN,
-  TELEGRAM_NOTIFICATIONS_BOT_WEBHOOK_PATH: '/notifications-bot',
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+  TELEGRAM_BOT_WEBHOOK_PATH: '/telegram-bot-webhook',
 
   // API settings
   API_PORT: process.env.PORT || '8000',
   API_PREFIX: process.env.API_PREFIX || '/api/v1/',
-
-  // .ENV variables
-  JWT_SECRET_KEY: 'test',
-  NODE_ENV: process.env.NODE_ENV || 'development',
 } as const;
