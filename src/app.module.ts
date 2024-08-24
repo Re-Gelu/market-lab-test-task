@@ -1,5 +1,6 @@
 import { PrismaModule } from 'nestjs-prisma';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { session } from 'telegraf';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -27,6 +28,7 @@ import { TelegramBotModule } from './telegram-bot/telegram-bot.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         token: configService.get<string>('TELEGRAM_BOT_TOKEN'),
+        middlewares: [session()],
         launchOptions: {
           webhook:
             configService.get<string>('NODE_ENV') === 'production'

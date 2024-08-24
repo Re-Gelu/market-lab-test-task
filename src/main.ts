@@ -4,11 +4,12 @@ import { getBotToken } from 'nestjs-telegraf';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
   const { httpAdapter } = app.get(HttpAdapterHost);
@@ -16,7 +17,10 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  if (configService.get<string>('NODE_ENV') === 'production') {
+  if (
+    configService.get<string>('NODE_ENV') === 'production' &&
+    configService.get<string>('PRODUCTION_DOMAIN')
+  ) {
     const telegramBot = app.get(getBotToken());
     app.use(
       telegramBot.webhookCallback(
@@ -25,7 +29,7 @@ async function bootstrap() {
     );
   }
 
-  await app.listen(configService.get<string>('API_PORT') || 8000);
+  await app.listen(configService.get<string>('PORT') || 8000);
 }
 
 bootstrap();

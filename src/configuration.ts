@@ -10,6 +10,5 @@ export default {
   TELEGRAM_BOT_WEBHOOK_PATH: '/telegram-bot-webhook',
 
   // API settings
-  API_PORT: process.env.PORT || '8000',
-  API_PREFIX: process.env.API_PREFIX || '/api/v1/',
+  PORT: process.env.PORT || '8000',
 } as const;
