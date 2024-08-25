@@ -6,9 +6,11 @@ import {
   Message,
   On,
   Start,
-  Update
+  Update,
 } from 'nestjs-telegraf';
 import { Markup } from 'telegraf';
+
+import { ConfigService } from '@nestjs/config';
 
 import { TelegramBotService } from './telegram-bot.service';
 import { TelegramBotWizard } from './telegram-bot.wizard';
@@ -19,9 +21,10 @@ export class TelegramBotUpdate {
   constructor(
     private readonly database: PrismaService,
     private readonly telegramBotService: TelegramBotService,
+    private readonly configService: ConfigService,
   ) {}
 
-  private readonly pageSize = 5;
+  private readonly pageSize = this.configService.get('PAGE_SIZE');
 
   @Start()
   async start(@Context() context: TelegramContext) {
