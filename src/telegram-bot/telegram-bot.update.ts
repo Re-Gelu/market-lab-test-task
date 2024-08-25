@@ -19,7 +19,7 @@ import { TelegramContext } from './telegram-context.type';
 @Update()
 export class TelegramBotUpdate {
   constructor(
-    private readonly database: PrismaService,
+    private readonly databaseService: PrismaService,
     private readonly telegramBotService: TelegramBotService,
     private readonly configService: ConfigService,
   ) {}
@@ -29,7 +29,7 @@ export class TelegramBotUpdate {
   @Start()
   async start(@Context() context: TelegramContext) {
     // Получить или создать пользователя
-    const user = await this.database.telegramBotUser.upsert({
+    const user = await this.databaseService.telegramBotUser.upsert({
       where: {
         id: context.from.id,
       },
@@ -74,13 +74,13 @@ export class TelegramBotUpdate {
     const page = Number(queryPayload) || 1;
 
     const [links, totalLinks] = await Promise.all([
-      this.database.link.findMany({
+      this.databaseService.link.findMany({
         where: { userId: context.from.id },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * this.pageSize,
         take: this.pageSize,
       }),
-      this.database.link.count({ where: { userId: context.from.id } }),
+      this.databaseService.link.count({ where: { userId: context.from.id } }),
     ]);
 
     if (links.length === 0) {
@@ -143,7 +143,9 @@ export class TelegramBotUpdate {
   async deleteUserLink(@Context() context: TelegramContext) {
     const linkId = context.match[1];
 
-    const link = await this.database.link.delete({ where: { id: linkId } });
+    const link = await this.databaseService.link.delete({
+      where: { id: linkId },
+    });
 
     await this.telegramBotService.replyOrEditWithHTML(
       context,
@@ -156,7 +158,9 @@ export class TelegramBotUpdate {
   async getUserLink(@Context() context: TelegramContext) {
     const linkId = context.match[1];
 
-    const link = await this.database.link.findUnique({ where: { id: linkId } });
+    const link = await this.databaseService.link.findUnique({
+      where: { id: linkId },
+    });
 
     if (!link) {
       await context.replyWithHTML('🚫 Эта ссылка удалена!');
@@ -180,7 +184,9 @@ export class TelegramBotUpdate {
     @Context() context: TelegramContext,
     @Message('text') text: string,
   ) {
-    const link = await this.database.link.findUnique({ where: { id: text } });
+    const link = await this.databaseService.link.findUnique({
+      where: { id: text },
+    });
 
     if (!link) {
       await context.replyWithHTML(
