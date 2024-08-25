@@ -37,7 +37,7 @@
 
 ```
 POSTGRES_DB = "market-lab-test-task"
-POSTGRES_USER = "postgres"
+POSTGRES_USER = "postgres" или "localhost" при локальной разработке
 POSTGRES_PASSWORD = "postgres"
 
 DB_HOST = "postgres"
