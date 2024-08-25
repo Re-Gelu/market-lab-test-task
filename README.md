@@ -57,7 +57,7 @@ PRODUCTION_DOMAIN = "google.com"
 $ yarn run docker
 ```
 
-## Установка зависимостей и генерация типов Prima
+## Установка зависимостей и генерация типов Prisma
 
 ```bash
 $ yarn install
@@ -79,3 +79,9 @@ $ yarn run start:prod
 $ yarn run start:migrate:prod
 ```
 
+
+##
+
+![image](https://github.com/user-attachments/assets/72662458-34d1-482e-b189-83c6ef4482d5)
+
+##
