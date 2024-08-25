@@ -44,11 +44,7 @@ export class TelegramBotWizard {
   ) {
     if (!isURL(text)) {
       await context.replyWithHTML(
-        `
-<b>❌ Ошибка! Некорректная ссылка!</b>
-
-Напишите ссылку ещё раз :3
-`,
+        `b>❌ Ошибка! Некорректная ссылка!</b>\n\nНапишите ссылку ещё раз :3`,
         this.inlineKeyboard,
       );
 
@@ -65,14 +61,9 @@ export class TelegramBotWizard {
       },
     });
 
-    await context.replyWithHTML(`
-💾 Ссылка успешно сохранена!
-
-🔑 <b>Уникальный код: <code>${link.id}</code></b>
-
-🏷️ Наименование: ${link.name}
-🔗 URL: ${link.url}
-`);
+    await context.replyWithHTML(
+      `💾 Ссылка успешно сохранена!\n\n🔑 <b>Уникальный код: <code>${link.id}</code></b>\n\n🏷️ Наименование: ${link.name}\n🔗 URL: ${link.url}`,
+    );
 
     await context.scene.leave();
   }
