@@ -31,7 +31,8 @@ import { TelegramBotModule } from './telegram-bot/telegram-bot.module';
         middlewares: [session()],
         launchOptions: {
           webhook:
-            configService.get<string>('NODE_ENV') === 'production'
+            configService.get<string>('NODE_ENV') === 'production' &&
+            configService.get<string>('PRODUCTION_DOMAIN')
               ? {
                   domain: configService.get<string>('PRODUCTION_DOMAIN'),
                   hookPath: configService.get<string>(
