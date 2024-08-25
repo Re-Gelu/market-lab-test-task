@@ -13,6 +13,7 @@ export class TelegramBotWizard {
     Markup.button.callback('⬅️ Отмена', `wizard_leave`),
   ]);
 
+  /** Спрашиваем название ссылки */
   @WizardStep(1)
   async firstStep(@Context() context: TelegramContext) {
     context.wizard.state.data = {};
@@ -24,6 +25,7 @@ export class TelegramBotWizard {
     await context.wizard.next();
   }
 
+  /** Получаем название ссылки и спрашиваем саму ссылку */
   @On('text')
   @WizardStep(2)
   async secondStep(@Context() context: TelegramContext) {
@@ -33,6 +35,7 @@ export class TelegramBotWizard {
     await context.wizard.next();
   }
 
+  /** Валидируем ссылку и если всё ок, то сохраняем */
   @On('text')
   @WizardStep(3)
   async end(
