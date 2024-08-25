@@ -44,7 +44,7 @@ export class TelegramBotWizard {
   ) {
     if (!isURL(text)) {
       await context.replyWithHTML(
-        `b>❌ Ошибка! Некорректная ссылка!</b>\n\nНапишите ссылку ещё раз :3`,
+        `<b>❌ Ошибка! Некорректная ссылка!</b>\n\nНапишите ссылку ещё раз :3`,
         this.inlineKeyboard,
       );
 

@@ -6,7 +6,7 @@ import {
   Message,
   On,
   Start,
-  Update,
+  Update
 } from 'nestjs-telegraf';
 import { Markup } from 'telegraf';
 
@@ -67,7 +67,7 @@ export class TelegramBotUpdate {
   @Hears('ℹ️ Мои ссылки')
   @Action(/links_page_(\d+)/)
   async getUserLinks(@Context() context: TelegramContext) {
-    const queryPayload = context.match?.[1];
+    const queryPayload = context.match[1];
     const page = Number(queryPayload) || 1;
 
     const [links, totalLinks] = await Promise.all([
@@ -179,15 +179,16 @@ export class TelegramBotUpdate {
   ) {
     const link = await this.database.link.findUnique({ where: { id: text } });
 
-    if (link) {
+    if (!link) {
       await context.replyWithHTML(
-        `🔑 <b>Ссылка по данному уникальному коду:</b>\n\n🏷️ Наименование: ${link.name}\n🔗 URL: ${link.url}`,
+        `❌ Ошибка! \n\nСсылка с кодом 🔑 <code>${text}</code> не найдена`,
       );
+
       return;
     }
 
     await context.replyWithHTML(
-      `❌ Ошибка! \n\nСсылка с кодом 🔑 <code>${text}</code> не найдена`,
+      `🔑 <b>Ссылка по данному уникальному коду:</b>\n\n🏷️ Наименование: ${link.name}\n🔗 URL: ${link.url}`,
     );
   }
 }
