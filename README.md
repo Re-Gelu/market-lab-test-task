@@ -2,9 +2,6 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
 ## Тестовое задание - Market Lab
 
 Реализовать бот хранения  ссылок используя фреймворк NestJS  
@@ -51,7 +48,16 @@ PORT = "8000"
 PRODUCTION_DOMAIN = "google.com" 
 ```
 
-## Project setup
+## Запуск через Docker
+
+Самый простой вариант запуска. Создаем .env файл по указаниям выше и запускаем команду. При помощи docker-compose создастся бд и бот, выполнятся миграции 
+
+```bash
+
+$ yarn run docker
+```
+
+## Установка зависимостей и генерация типов Prisma
 
 ```bash
 $ yarn install
@@ -73,9 +79,9 @@ $ yarn run start:prod
 $ yarn run start:migrate:prod
 ```
 
-## Docker
 
-```bash
-# one command for compose up and build project with db
-$ yarn run docker
-```
+##
+
+![image](https://github.com/user-attachments/assets/72662458-34d1-482e-b189-83c6ef4482d5)
+
+##
