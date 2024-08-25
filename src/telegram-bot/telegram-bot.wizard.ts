@@ -9,6 +9,8 @@ import { TelegramContext } from './telegram-context.type';
 export class TelegramBotWizard {
   constructor(private readonly database: PrismaService) {}
 
+  private readonly maxNameLength = 40;
+
   private readonly inlineKeyboard = Markup.inlineKeyboard([
     Markup.button.callback('⬅️ Отмена', `wizard_leave`),
   ]);
@@ -28,8 +30,23 @@ export class TelegramBotWizard {
   /** Получаем название ссылки и спрашиваем саму ссылку */
   @On('text')
   @WizardStep(2)
-  async secondStep(@Context() context: TelegramContext) {
-    context.wizard.state.data.name = context.message.text;
+  async secondStep(
+    @Context() context: TelegramContext,
+    @Message('text') text: string,
+  ) {
+    if (text.length > this.maxNameLength) {
+      await context.replyWithHTML(
+        `
+<b>❌ Ошибка! Максимальный размер названия - ${this.maxNameLength} символов!</b>
+
+Напишите название ссылки ещё раз :3`,
+        this.inlineKeyboard,
+      );
+
+      return;
+    }
+
+    context.wizard.state.data.name = text;
 
     await context.replyWithHTML('🔗 Напишите ссылку', this.inlineKeyboard);
     await context.wizard.next();
@@ -44,7 +61,10 @@ export class TelegramBotWizard {
   ) {
     if (!isURL(text)) {
       await context.replyWithHTML(
-        `<b>❌ Ошибка! Некорректная ссылка!</b>\n\nНапишите ссылку ещё раз :3`,
+        `
+<b>❌ Ошибка! Некорректная ссылка!</b>
+
+Напишите ссылку ещё раз :3`,
         this.inlineKeyboard,
       );
 
@@ -62,7 +82,12 @@ export class TelegramBotWizard {
     });
 
     await context.replyWithHTML(
-      `💾 Ссылка успешно сохранена!\n\n🔑 <b>Уникальный код: <code>${link.id}</code></b>\n\n🏷️ Наименование: ${link.name}\n🔗 URL: ${link.url}`,
+      `
+💾 Ссылка успешно сохранена!
+      
+🔑 <b>Уникальный код: <code>${link.id}</code></b>
+
+🏷️ Наименование: ${link.name}\n🔗 URL: ${link.url}`,
     );
 
     await context.scene.leave();
